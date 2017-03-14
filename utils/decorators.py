@@ -13,3 +13,14 @@ def time_measurement(func):
         return res
 
     return wrapper
+
+
+def constant(func):
+
+    def fset(self, value):
+        raise TypeError
+
+    def fget(self):
+        return func()
+
+    return property(fget, fset)
