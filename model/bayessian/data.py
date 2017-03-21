@@ -1,3 +1,14 @@
+class Color:
+    def __init__(self, red, green, blue):
+        super().__init__()
+        self.red = red
+        self.green = green
+        self.blue = blue
+
+    def __repr__(self):
+        return 'r{},g{},b{}'.format(self.red, self.green, self.blue)
+
+
 class BayessianProbabilityMap:
     """
     Encapsulate probability map colors to
@@ -26,6 +37,8 @@ class ColorLookUpTable:
     """
     Encapsulate information about stored bins per channel and dictionaries for colors with number of occurrences
     """
+
+    _EMPTY = Color(0, 0, 0)
 
     def __init__(self, bins, total_count=0):
         super().__init__()

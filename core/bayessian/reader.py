@@ -51,7 +51,8 @@ class BayessianReader(Reader):
             probability_map.lesion_probability[key] = probability
             probability_map.non_lesion_probability[key] = 1 - probability
 
-        filtered = {(k, v) for k, v in table.non_skin_class.items() if k not in probability_map.non_lesion_probability.items()}
+        filtered = {(k, v) for k, v in table.non_skin_class.items() if
+                    k not in probability_map.non_lesion_probability.items()}
         # filtered = filter(lambda key, value: not key in probability_map.non_lesion_probability,
         #                   table.non_skin_class())
         for key, count in filtered:
@@ -74,6 +75,7 @@ class BayessianReader(Reader):
             current_mask_dir = masks.get(image_name)
             if current_mask_dir:
                 img = cv2.imread(image_dir, cv2.IMREAD_COLOR)
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 mask = cv2.imread(current_mask_dir, cv2.IMREAD_GRAYSCALE)
                 self._read_single(mask, img, table, reducer)
         return table, reducer
@@ -88,16 +90,16 @@ class BayessianReader(Reader):
         width, height, channels = img.shape
         mask_width, mask_height = mask.shape
 
-        if width == mask_width & height == mask_height:
+        if width == mask_width and height == mask_height:
             indices = list([(x, y) for y in range(height) for x in range(width)])
             for x, y in indices:
-                (b, g, r) = img[x, y]
-                bgr = (b, g, r)
-                bgr = reducer.reduce(bgr)
+                [r, g, b] = img[x, y]
+                color = Color(r, g, b)
+                color = reducer.reduce(color)
                 if cv_util.is_skin(mask[x, y]):
-                    table.add_skin_class(bgr)
+                    table.add_skin_class(color)
                 else:
-                    table.add_non_skin(bgr)
+                    table.add_non_skin(color)
 
     @decorators.constant
     def DEFAULT_DIRECTORY():

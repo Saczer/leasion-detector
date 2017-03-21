@@ -36,12 +36,11 @@ class Reducer:
         if self.channel_colors == ChannelColors.CHANNEL_256:
             return color_reduce
 
-        b, g, r = color_reduce
-        b = self._reduce_single(b, self.channel_colors.value)
-        g = self._reduce_single(g, self.channel_colors.value)
-        r = self._reduce_single(r, self.channel_colors.value)
+        color_reduce.red = self._reduce_single(color_reduce.red, self.channel_colors.value)
+        color_reduce.green = self._reduce_single(color_reduce.green, self.channel_colors.value)
+        color_reduce.blue = self._reduce_single(color_reduce.blue, self.channel_colors.value)
 
-        return b, g, r
+        return color_reduce
 
     def _reduce_single(self, channel, reduce_value):
         """
